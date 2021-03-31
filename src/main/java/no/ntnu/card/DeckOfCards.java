@@ -11,7 +11,6 @@ public class DeckOfCards {
 
     private final char[] suit = { 'S', 'H', 'D', 'C' };
     private final List<PlayingCard> cards;
-    private List<PlayingCard> communityCards;
 
     public DeckOfCards() {
         this.cards = IntStream.range(0, suit.length).mapToObj(i -> suit[i])
@@ -36,8 +35,7 @@ public class DeckOfCards {
 
     public List<PlayingCard> dealFlop() {
         List<PlayingCard> flop = cards.stream().limit(3).collect(Collectors.toList());
-        this.cards.removeIf(e -> flop.contains(e));
-        communityCards = flop;
+        updateDeck(flop);
         return flop;
     }
 
@@ -47,13 +45,21 @@ public class DeckOfCards {
         return toReturn;
     }
 
+    private void updateDeck(List<PlayingCard> toRemove) {
+        this.cards.removeIf(e -> toRemove.contains(e));
+    }
+
+
+    private List<PlayingCard> drawHand(int n) {
+       List<PlayingCard> toReturn = cards.stream().limit(n).collect(Collectors.toList());
+       updateDeck(toReturn);
+       return toReturn;
+    }
+
     public Collection<PlayingCard> dealHand(int n) {
-
+        return drawHand(n);
     }
 
-    public char[] getSuit() {
-        return suit;
-    }
 
     public List<PlayingCard> getCards() {
         return cards;
