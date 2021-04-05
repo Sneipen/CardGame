@@ -53,6 +53,24 @@ public class PlayingCard {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlayingCard that = (PlayingCard) o;
+
+        if (suit != that.suit) return false;
+        return face == that.face;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = suit;
+        result = 31 * result + face;
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "PlayingCard{" +
                 "suit=" + suit +
