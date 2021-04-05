@@ -3,7 +3,7 @@ package no.ntnu.card;
 import java.util.List;
 
 public class Hand {
-    List<PlayingCard> cards;
+    private List<PlayingCard> cards;
 
     public Hand(List<PlayingCard> cards) {
         this.cards = cards;
