@@ -20,6 +20,7 @@ public class DeckOfCards {
                 .collect(Collectors.toList());
 
         communityCards = new ArrayList<>();
+        newHand(2);
         shuffleDeck();
     }
 
@@ -52,22 +53,22 @@ public class DeckOfCards {
 
         for(Character ch: suit) {
             switch (ch) {
-                case 'S' -> {
+                case 'S':
                     s++;
                     values.put('S', s);
-                }
-                case 'H' -> {
-                    h++;
-                    values.put('H', h);
-                }
-                case 'C' -> {
-                    c++;
-                    values.put('C', c);
-                }
-                case 'D' -> {
-                    d++;
-                    values.put('d', d);
-                }
+                    break;
+                case 'H':
+                    s++;
+                    values.put('H', s);
+                    break;
+                case 'C':
+                    s++;
+                    values.put('C', s);
+                    break;
+                case 'D':
+                    s++;
+                    values.put('D', s);
+                    break;
             }
         }
 
@@ -79,10 +80,18 @@ public class DeckOfCards {
 
         if(values.get(flushChar) >= 5) {
             switch (flushChar) {
-                case 'S' -> flushType = "Spades";
-                case 'H' -> flushType = "Hearts";
-                case 'C' -> flushType = "Clubs";
-                case 'D' -> flushType = "Diamonds";
+                case 'S':
+                    flushType = "Spades";
+                    break;
+                case 'H':
+                    flushType = "Hearts";
+                    break;
+                case 'C':
+                    flushType = "Clubs";
+                    break;
+                case 'D':
+                    flushType = "Diamonds";
+                    break;
             }
             toReturn = "Flush with " + flushType;
         }
@@ -131,7 +140,7 @@ public class DeckOfCards {
         updateDeck(communityCards);
     }
 
-    public void newHand(int n) {
+    private void newHand(int n) {
         this.hand = new Hand(dealHand(n));
     }
 
