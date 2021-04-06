@@ -20,8 +20,9 @@ public class DeckOfCards {
                 .collect(Collectors.toList());
 
         communityCards = new ArrayList<>();
-        newHand(2);
+
         shuffleDeck();
+        newHand(2);
     }
 
 
@@ -50,24 +51,24 @@ public class DeckOfCards {
         int c = 0;
         int d = 0;
         Map<Character, Integer> values = new HashMap<>();
-
-        for(Character ch: suit) {
+        List<Character> chars = getBoard().stream().map(PlayingCard::getSuit).collect(Collectors.toList());
+        for(Character ch: chars) {
             switch (ch) {
                 case 'S':
                     s++;
                     values.put('S', s);
                     break;
                 case 'H':
-                    s++;
-                    values.put('H', s);
+                    h++;
+                    values.put('H', h);
                     break;
                 case 'C':
-                    s++;
-                    values.put('C', s);
+                    c++;
+                    values.put('C', c);
                     break;
                 case 'D':
-                    s++;
-                    values.put('D', s);
+                    d++;
+                    values.put('D', d);
                     break;
             }
         }
@@ -105,7 +106,7 @@ public class DeckOfCards {
         return p.getAsString();
     }
 
-    private int sumOfCards() {
+    public int sumOfCards() {
         return getBoard().stream().mapToInt(PlayingCard::getFace).sum();
     }
 
@@ -115,7 +116,11 @@ public class DeckOfCards {
                 map(PlayingCard::getAsString).map(s -> s + " ").
                 collect(Collectors.joining());
 
-        if(hearts.charAt(0) == 'H') return hearts;
+        try {
+            if(hearts.charAt(0) == 'H') return hearts;
+        } catch (StringIndexOutOfBoundsException e) {
+            return "No hearts";
+        }
         return "No hearts";
     }
 
@@ -123,13 +128,30 @@ public class DeckOfCards {
         return getBoard().stream().anyMatch(s -> s.equals(new PlayingCard('S', 12)));
     }
 
-//    public int pair() {
-//        List<PlayingCard> pairs = getBoard().stream().
-//    }
+    public int set() {
+        return (int) getBoard().stream()
+                .collect(Collectors.groupingBy(PlayingCard::getFace, Collectors.counting()))
+                .values().stream().filter(i-> i > 2).count();
+    }
+
+    public String pair() {
+        int x = (int) getBoard().stream()
+                .collect(Collectors.groupingBy(PlayingCard::getFace, Collectors.counting()))
+                .values().stream().filter(i-> i > 1).count();
+
+            if(x == 1) {
+                return "One pair";
+            } else if(x >= 2) return "Two pair";
+            else return "";
+    }
 
     public String checkHandRank() {
-        if(!(flush().equals(""))) return flush();
-        return highCard();
+        if(!((flush().equals("")))) return flush();
+
+        if(set() != 0) return "Set";
+
+        if(!(pair().equals(""))) return pair();
+        return "Highcard: " + highCard();
     }
 
 

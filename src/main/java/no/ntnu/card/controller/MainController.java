@@ -4,25 +4,35 @@ package no.ntnu.card.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import no.ntnu.card.DeckOfCards;
-import no.ntnu.card.Hand;
-import no.ntnu.card.PlayingCard;
 
 public class MainController {
-    private DeckOfCards deck;
-    private Hand hand;
 
+    private DeckOfCards deck;
 
     @FXML
-    private Button dealHandButton;
+    private TextField handRank;
+
+    @FXML
+    private TextField queenOfSpadesField;
+
+    @FXML
+    private TextField cardsOfHeartsField;
+
+    @FXML
+    private TextField sumOfTheFacesField;
 
     @FXML
     private Button dealFlopButton;
 
     @FXML
-    private Button dealTurnRiverButton;
+    private Button dealTurnButton;
+
+    @FXML
+    private Button dealRiverButton;
 
     @FXML
     private Button checkHandValueButton;
@@ -52,38 +62,100 @@ public class MainController {
     private ImageView personalCard2;
 
 
-    @FXML
-    void checkHandValue(ActionEvent event) {
 
+
+    @FXML
+    void checkHandValue() {
+        String handValue = deck.checkHandRank();
+        handRank.setText(handValue);
+
+        if(deck.queenOfSpades()) {
+            queenOfSpadesField.setText("True");
+        } else queenOfSpadesField.setText("False");
+
+        sumOfTheFacesField.setText(Integer.toString(deck.sumOfCards()));
+        cardsOfHeartsField.setText(deck.getHearts());
     }
+
 
     @FXML
     void dealFlop(ActionEvent event) {
+        deck.dealFlop();
+        communityCard1.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getCommunityCards().
+                        get(0).getCardImagePath())));
+        communityCard1.setVisible(true);
 
+        communityCard2.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getCommunityCards().
+                        get(1).getCardImagePath())));
+        communityCard2.setVisible(true);
+
+        communityCard3.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getCommunityCards().
+                        get(2).getCardImagePath())));
+        communityCard3.setVisible(true);
+
+
+        dealFlopButton.setVisible(false);
+        dealTurnButton.setVisible(true);
+        checkHandValueButton.setVisible(true);
     }
+
 
     @FXML
-    void dealHand(ActionEvent event) {
+    void dealTurn(ActionEvent event) {
+            deck.dealTurnOrRiver();
+            communityCard4.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getCommunityCards().
+                     get(3).getCardImagePath())));
+            communityCard4.setVisible(true);
 
+            dealTurnButton.setVisible(false);
+            dealRiverButton.setVisible(true);
     }
+
 
     @FXML
-    void dealTurnOrRiver(ActionEvent event) {
+    void dealRiver(ActionEvent event) {
+        deck.dealTurnOrRiver();
+        communityCard5.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getCommunityCards().
+                        get(4).getCardImagePath())));
+        communityCard5.setVisible(true);
 
+        dealRiverButton.setVisible(false);
     }
+
+
 
     @FXML
     void newGame(ActionEvent e) {
         deck = new DeckOfCards();
-        Image card1 = new Image(getClass().getResourceAsStream("/cardImg/" + deck.getHand().getCards().get(0).getCardImagePath()));
-       // Image card2 = new Image(getClass().getResourceAsStream("/cardImg/" + deck.getHand().getCards().get(1).getCardImagePath()));
-        personalCard1.setImage(card1);
-      //  personalCard2.setImage(card2);
-      //  System.out.println(deck.getHand().getCards().get(0).getCardImagePath());
-      //  for(PlayingCard card: deck.getCards()) {
-       //     System.out.println(card.getCardImagePath());
-      //  }
+        personalCard1.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getHand().
+                        getCards().get(0).getCardImagePath())));
 
+        personalCard2.setImage(new Image(getClass().
+                getResourceAsStream("/cardImg/" + deck.getHand().
+                        getCards().get(1).getCardImagePath())));
+
+
+        dealFlopButton.setVisible(true);
+        dealTurnButton.setVisible(false);
+        dealRiverButton.setVisible(false);
+        communityCard1.setVisible(false);
+        communityCard2.setVisible(false);
+        communityCard3.setVisible(false);
+        communityCard4.setVisible(false);
+        communityCard5.setVisible(false);
+        checkHandValueButton.setVisible(false);
+        handRank.setText("");
+        queenOfSpadesField.setText("");
+        sumOfTheFacesField.setText("");
+        cardsOfHeartsField.setText("");
     }
+
+
 
 }
